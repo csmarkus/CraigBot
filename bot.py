@@ -1,12 +1,19 @@
 import discord
 import time
 import random
+import json
+import threading
 
 f = open("settings.txt", "r")
 loginInfo = f.read().split(":")
 f.close()
 
 admins = []
+status = { 
+	"debug": False,
+	"trivia": False,
+	"trivia_channel": ""
+}
 
 client = discord.Client()
 client.login(loginInfo[0], loginInfo[1])
@@ -16,7 +23,10 @@ if not client.is_logged_in:
 	exit(1)
 
 def handleCommand(args, msg):
-	command = args[0].lower()
+	global status
+	global admins
+
+	command = args[0].strip("!").lower()
 
 	if command == "help":
 		print("SYS: Replying with help")
@@ -27,7 +37,7 @@ def handleCommand(args, msg):
 		client.send_message(msg.channel, "**!admins** - List of bot admins [WIP]")
 		client.send_message(msg.channel, "**!setadmin** *admin only* - set mentioned users as admins on the bot")
 		client.send_message(msg.channel, "**!removeadmin** *admin only* - removes mentioned users from being bot admins")
-		client.send_message(msg.channel, "**!addinsult** *admin only* - adds an insult to the list of available insults")
+		client.send_message(msg.channel, "**!addinsult** - adds an insult to the list of available insults")
 		client.send_message(msg.channel, "**!insult** - insults the first mentioned user")
 	elif command == "exit":
 		if checkPrivilege(msg.author.id):
@@ -64,10 +74,17 @@ def handleCommand(args, msg):
 	elif command == "addinsult":
 		insult = args
 		insult.pop(0)
+		f = open("insults.txt", "a")
+		f.write(" ".join(insult) + "\n")
+		f.close()
+		client.send_message(msg.channel, "Added")
+	elif command == "trivia":
+		if args[1] == "on":
+			status["trivia"] = True
+			status["trivia_channel"] = msg.channel.id
+	elif command == "status":
 		if checkPrivilege(msg.author.id):
-			f = open("insults.txt", "a")
-			f.write(" ".join(insult) + "\n")
-			f.close()
+			client.send_message(msg.channel, "```" + json.dumps(status) + "```")
 
 
 def checkPrivilege(id):
@@ -81,12 +98,10 @@ def on_message(msg):
 	if msg.author.id == client.connection.user.id:
 		return
 
-	print("MSG: [{}:{}] -> {} : {}".format(str(msg.author), msg.author.id, msg.channel.name, msg.content.encode("utf-8")))
+	print("MSG: [{}:{}] -> {}:{} : {}".format(str(msg.author), msg.author.id, msg.channel.name, msg.channel.id, msg.content.encode("utf-8")))
 
 	if msg.content.startswith("!"):
 		args = msg.content.split(" ")
-		args[0] = args[0].strip("!")
-		
 		handleCommand(args, msg)
 
 @client.event
