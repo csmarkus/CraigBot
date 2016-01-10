@@ -93,7 +93,22 @@ def handleCommand(args, msg):
 			client.send_message(msg.channel, "```" + json.dumps(status) + "```")
 	elif command == "flip":
 		client.send_message(msg.channel, random.choice(["HEADS", "TAILS"]))
+	elif command =="quote":
+		tts = False
 
+		if len(args) > 2:
+			if args[2] == "tts":
+				tts = True
+
+		client.send_message(msg.channel, getQuote(args[1]), True, tts)
+
+def getQuote(name)
+	with open("quotes.txt") as f: 
+	quotes = open("quotes.txt", "r").read().splitlines()
+	quote = random.choice(quotes)
+	if name == quote.partition("|")[0]
+		return quote.partition("|")[1]
+		
 
 def checkPrivilege(id):
 	if id in admins:
