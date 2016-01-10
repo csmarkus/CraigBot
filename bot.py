@@ -102,12 +102,12 @@ def handleCommand(args, msg):
 
 		client.send_message(msg.channel, getQuote(args[1]), True, tts)
 
-def getQuote(name)
+def getQuote(name):
 	with open("quotes.txt") as f: 
-	quotes = open("quotes.txt", "r").read().splitlines()
-	quote = random.choice(quotes)
-	if name == quote.partition("|")[0]
-		return quote.partition("|")[1]
+		quotes = open("quotes.txt", "r").read().splitlines()
+		quote = random.choice(quotes)
+		if name == quote.partition("|")[0]:
+			return quote.partition("|")[1]
 		
 
 def checkPrivilege(id):
