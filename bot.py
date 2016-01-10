@@ -46,8 +46,9 @@ def handleCommand(args, msg):
 	elif command == "setadmin":
 		if checkPrivilege(msg.author.id):
 			for user in msg.mentions:
-				print("SYS: Adding {} as admin".format(user.name))
-				admins.append(user.id)
+				if user.id not in admins:
+					print("SYS: Adding {} as admin".format(user.name))
+					admins.append(user.id)
 
 			f = open("admins.txt", "w")
 			f.write(",".join(admins))
@@ -69,8 +70,13 @@ def handleCommand(args, msg):
 	elif command == "insult":
 		insults = open("insults.txt", "r").read().splitlines()
 		insult = random.choice(insults)
+		tts = False
 
-		client.send_message(msg.channel, insult.replace("$user", args[1]))
+		if len(args) > 2:
+			if args[2] == "tts":
+				tts = True
+
+		client.send_message(msg.channel, insult.replace("$user", args[1]), True, tts)
 	elif command == "addinsult":
 		insult = args
 		insult.pop(0)
@@ -85,6 +91,8 @@ def handleCommand(args, msg):
 	elif command == "status":
 		if checkPrivilege(msg.author.id):
 			client.send_message(msg.channel, "```" + json.dumps(status) + "```")
+	elif command == "flip":
+		client.send_message(msg.channel, random.choice(["HEADS", "TAILS"]))
 
 
 def checkPrivilege(id):
