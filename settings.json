@@ -1,0 +1,10 @@
+{
+	"login": {
+		"email": "",
+		"password": ""
+	},
+	"admins": [
+	],
+	"adminRole": "",
+	"commandCharacter": "!"
+}
