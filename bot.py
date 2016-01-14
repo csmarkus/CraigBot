@@ -20,28 +20,21 @@ async def HandleCommand(msg, client):
 		await client.send_message(msg.channel, 'I am a bot. I insult Hex.')
 		await client.send_message(msg.channel, '__**Commands**__')
 		await client.send_message(msg.channel, '**!help** - list of commands')
-		await client.send_message(msg.channel, '**!exit** *admin only* - close the bot')
-		await client.send_message(msg.channel, '**!admins** - List of admins [Work in Progress]')
 		await client.send_message(msg.channel, '**!insult** - Insults the first mentioned user')
-		await client.send_message(msg.channel, '**!addinsult** - Add an insult to the bots insult list. Denote the insultee with $user (tts currently disabled)')
+		await client.send_message(msg.channel, '**!insulttts** - Insults the first mentioned user and reads it out')
+		await client.send_message(msg.channel, '**!addinsult** - Add an insult to the bots insult list. Denote the insultee with $user')
 	elif command == 'insult':
-		await client.send_message(msg.channel, (random.choice(insults)).replace('$user', args[1]))
+		await client.send_message(msg.channel, (random.choice(insults)).replace('$user', args[0]))
+	elif command == 'insulttts':
+		await client.send_message(msg.channel, (random.choice(insults)).replace('$user', args[0]), tts=True)
 	elif command == 'addinsult':
 		insults.append(' '.join(args))
 		saveFile('insults.json', insults)
 		await client.send_message(msg.channel, 'Added')
-	elif command == 'admins':
-		await client.send_message(msg.channel, 'Bot Admins:')
-		for admin in settings['admins']:
-			await client.send_message(msg.channel, admin)
-
-		await client.send_message(msg.channel, 'Server Admins:')
-		for member in msg.server.members:
-			for role in member.roles:
-				if role.name == settings['adminRole']:
-					await client.send_message(msg.channel, member.name)
 	elif command == 'flip':
 		await client.send_message(msg.channel, random.choice(["HEADS", "TAILS"]))
+	elif command == 'slap':
+		await client.send_message(msg.channel, "*slaps {} with a trout*".format(args[0]))
 	elif command == 'exit':
 		if checkPrivilege(msg.author.id):
 			exit(1)
