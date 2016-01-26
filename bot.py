@@ -48,6 +48,14 @@ async def HandleCommand(msg, client):
 			await client.edit_profile(settings['login']['password'], username=args[0])
 	elif command == 'save':
 		economy.save()
+	elif command == 'createevent':
+		economy.createEvent(args[0], args[1])
+	elif command == 'addoption':
+		economy.addOption(args[0], args[1])
+	elif command == 'bet':
+		economy.addBet(args[0], msg.author.id, args[1], args[2], args[3])
+	elif command == 'payout':
+		economy.eventPayout(args[0], args[1])
 
 def saveFile(file, data):
 	with open(file, 'w') as f:
