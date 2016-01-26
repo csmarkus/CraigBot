@@ -40,7 +40,12 @@ async def HandleCommand(msg, client):
 		await client.send_message(msg.channel, "*slaps {} with a trout*".format(args[0]))
 	elif command == 'exit':
 		if checkPrivilege(msg.author.id):
-			exit(1)
+			await client.logout()
+			try:
+				exit(1)
+			except SystemExit:
+				pass
+
 	elif command == 'balance':
 		await client.send_message(msg.channel, " {}'s Balance: {}".format(msg.author.mention, economy.checkBalance(msg.author.id)))
 	elif command == 'name':
