@@ -12,7 +12,7 @@ class Economy:
 		self.settings = e['settings']
 
 		threading.Timer(self.settings['paydaytimeout'], self.payday).start()
-		threading.Timer(600, self.saveBank).start()
+		threading.Timer(300, self.saveBank).start()
 
 	def addAccount(self, accountId):
 		if accountId not in self.bank:
@@ -34,8 +34,10 @@ class Economy:
 		return True
 
 	def saveBank(self):
+		self.save()
+		threading.Timer(600, self.saveBank).start()
+
+	def save(self):
 		data = {'settings': self.settings, 'accounts': self.bank }
 		with open('economy.json', 'w') as f:
 			json.dump(data, f, indent = 4, sort_keys = True)
-
-		threading.Timer(600, self.saveBank).start()

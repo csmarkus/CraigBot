@@ -47,7 +47,7 @@ async def HandleCommand(msg, client):
 		if checkPrivilege(msg.author.id):
 			await client.edit_profile(settings['login']['password'], username=args[0])
 	elif command == 'save':
-		economy.saveBank()
+		economy.save()
 
 def saveFile(file, data):
 	with open(file, 'w') as f:
