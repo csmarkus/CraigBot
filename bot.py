@@ -43,6 +43,9 @@ async def HandleCommand(msg, client):
 			exit(1)
 	elif command == 'balance':
 		await client.send_message(msg.channel, "Balance: " + economy.checkBalance(msg.author.id))
+	elif command == 'name':
+		if checkPrivilege(msg.author.id):
+			await client.edit_profile(settings['login']['password'], username=args[0])
 
 def saveFile(file, data):
 	with open(file, 'w') as f:
