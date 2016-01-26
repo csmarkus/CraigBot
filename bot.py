@@ -2,6 +2,7 @@ import discord
 import asyncio
 import random
 import json
+from economy import Economy
 
 with open('settings.json') as f:
 	settings = json.load(f)
@@ -10,6 +11,7 @@ with open('insults.json') as f:
 	insults = json.load(f)
 
 client = discord.Client()
+economy = Economy()
 
 async def HandleCommand(msg, client):
 	args = msg.content.split(' ')
@@ -38,6 +40,8 @@ async def HandleCommand(msg, client):
 	elif command == 'exit':
 		if checkPrivilege(msg.author.id):
 			exit(1)
+	elif command == 'balance':
+		await client.send_message(msg.channel, "Balance: " + economy.checkBalance(msg.author.id))
 
 def saveFile(file, data):
 	with open(file, 'w') as f:
@@ -53,10 +57,17 @@ def checkPrivilege(id):
 async def on_message(msg):
 	if msg.content.startswith(settings['commandCharacter']):
 		await HandleCommand(msg, client)
+	else:
+		economy.addFunds(msg.author.id, 0.25)
 
 @client.async_event
 async def on_ready():
 	print('SYS: Bot is running as {}'.format(client.user.name))
+
+	server = client.get_server('66142305177841664')
+
+	for member in server.members:
+		economy.addAccount(member.id)
 
 def main():
 	client.run(settings['login']['email'], settings['login']['password'])

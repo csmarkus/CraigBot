@@ -1,0 +1,9 @@
+{
+	"settings": {
+		"sign": "$",
+		"paydaytimeout": 300,
+		"paydayamount": 100.00
+	},
+	"accounts": {
+	}
+}
