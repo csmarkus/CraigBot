@@ -25,6 +25,7 @@ async def HandleCommand(msg, client):
 		await client.send_message(msg.channel, '**!insult** - Insults the first mentioned user')
 		await client.send_message(msg.channel, '**!insulttts** - Insults the first mentioned user and reads it out')
 		await client.send_message(msg.channel, '**!addinsult** - Add an insult to the bots insult list. Denote the insultee with $user')
+		await client.send_message(msg.channel, '**!balance** - check your economy balance')
 	elif command == 'insult':
 		await client.send_message(msg.channel, (random.choice(insults)).replace('$user', args[0]))
 	elif command == 'insulttts':
