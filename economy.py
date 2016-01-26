@@ -15,7 +15,8 @@ class Economy:
 		threading.Timer(600, self.saveBank).start()
 
 	def addAccount(self, accountId):
-		self.bank[accountId] = 0.00
+		if accountId not in self.bank:
+			self.bank[accountId] = 0.00
 
 	def checkBalance(self, userid):
 		return self.settings['sign'] + str(self.bank[userid])
